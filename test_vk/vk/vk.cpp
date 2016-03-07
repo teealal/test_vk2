@@ -257,7 +257,7 @@ namespace vk
 			return result;
 		}
 
-		uint32_t swapchainImagesCount = 2;
+		uint32_t swapchainImagesCount = VK_NUM_BUFFERS;
 		VkImage swapchainImage[VK_NUM_BUFFERS] = { VK_NULL_HANDLE, VK_NULL_HANDLE };
 		result = swapchain.getSwapchainImages(&swapchainImagesCount, swapchainImage);
 		if (result != VK_SUCCESS)
