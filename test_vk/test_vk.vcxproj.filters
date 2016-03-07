@@ -65,6 +65,21 @@
     <ClInclude Include="vk\vk_swapchain.h">
       <Filter>Source Files\vk</Filter>
     </ClInclude>
+    <ClInclude Include="vk\vk_pipeline.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="vk\vk_shader.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="vk\vk_vertexBuffer.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="vk\vk_pipelineCache.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="vk\vk_pipelineLayout.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -107,6 +122,21 @@
       <Filter>Source Files\vk</Filter>
     </ClCompile>
     <ClCompile Include="vk\vk_swapchain.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_shader.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_vertexBuffer.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_pipeline.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_pipelineLayout.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_pipelineCache.cpp">
       <Filter>Source Files\vk</Filter>
     </ClCompile>
   </ItemGroup>

@@ -12,8 +12,13 @@
 #include "vk_semaphore.h"
 #include "vk_renderPass.h"
 #include "vk_swapchain.h"
-#include "vk_image.h"
 #include "vk_imageView.h"
+#include "vk_image.h"
+#include "vk_pipelineCache.h"
+#include "vk_pipelineLayout.h"
+#include "vk_pipeline.h"
+#include "vk_vertexBuffer.h"
+#include "vk_shader.h"
 
 #define VK_NUM_BUFFERS		2
 

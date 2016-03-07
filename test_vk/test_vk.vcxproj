@@ -166,10 +166,15 @@
     <ClInclude Include="vk\vk_image.h" />
     <ClInclude Include="vk\vk_imageView.h" />
     <ClInclude Include="vk\vk_instance.h" />
+    <ClInclude Include="vk\vk_pipeline.h" />
+    <ClInclude Include="vk\vk_pipelineCache.h" />
+    <ClInclude Include="vk\vk_pipelineLayout.h" />
     <ClInclude Include="vk\vk_queue.h" />
     <ClInclude Include="vk\vk_renderPass.h" />
     <ClInclude Include="vk\vk_semaphore.h" />
+    <ClInclude Include="vk\vk_shader.h" />
     <ClInclude Include="vk\vk_swapchain.h" />
+    <ClInclude Include="vk\vk_vertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -187,10 +192,15 @@
     <ClCompile Include="vk\vk_image.cpp" />
     <ClCompile Include="vk\vk_imageView.cpp" />
     <ClCompile Include="vk\vk_instance.cpp" />
+    <ClCompile Include="vk\vk_pipeline.cpp" />
+    <ClCompile Include="vk\vk_pipelineCache.cpp" />
+    <ClCompile Include="vk\vk_pipelineLayout.cpp" />
     <ClCompile Include="vk\vk_queue.cpp" />
     <ClCompile Include="vk\vk_renderPass.cpp" />
     <ClCompile Include="vk\vk_semaphore.cpp" />
+    <ClCompile Include="vk\vk_shader.cpp" />
     <ClCompile Include="vk\vk_swapchain.cpp" />
+    <ClCompile Include="vk\vk_vertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="test_vk.rc" />
