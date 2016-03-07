@@ -161,6 +161,7 @@
     <ClInclude Include="vk\vk.h" />
     <ClInclude Include="vk\vk_commandBuffer.h" />
     <ClInclude Include="vk\vk_commandPool.h" />
+    <ClInclude Include="vk\vk_descriptor.h" />
     <ClInclude Include="vk\vk_device.h" />
     <ClInclude Include="vk\vk_framebuffer.h" />
     <ClInclude Include="vk\vk_image.h" />
@@ -187,6 +188,7 @@
     <ClCompile Include="vk\vk.cpp" />
     <ClCompile Include="vk\vk_commandBuffer.cpp" />
     <ClCompile Include="vk\vk_commandPool.cpp" />
+    <ClCompile Include="vk\vk_descriptor.cpp" />
     <ClCompile Include="vk\vk_device.cpp" />
     <ClCompile Include="vk\vk_framebuffer.cpp" />
     <ClCompile Include="vk\vk_image.cpp" />

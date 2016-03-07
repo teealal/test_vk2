@@ -11,6 +11,7 @@ namespace vk
 
 		void create();
 		void destroy();
+		void update(VkBuffer buffer, VkDeviceSize size);
 
 		VkDescriptorSetLayout m_descriptorSetLayout;
 		VkDescriptorPool m_descriptorPool;
