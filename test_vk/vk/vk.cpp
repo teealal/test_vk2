@@ -1,5 +1,6 @@
 #include <fstream>
 #include <memory>
+
 #include "vk.h"
 
 
@@ -27,8 +28,12 @@ namespace vk
 	PipelineLayout pipelineLayout;
 	Pipeline pipeline;
 
+	Descriptor descriptor;
+
 	Shader vertexShader;
 	Shader fragmentShader;
+
+	UniformBuffer view_proj;
 
 	char* load_binary(const char* path, size_t* p_size = nullptr)
 	{
@@ -104,6 +109,8 @@ namespace vk
 
 		{
 			vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.m_pipeline);
+
+			vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout.m_pipelineLayout, 0, 1, &descriptor.m_descriptorSet, 0, nullptr);
 
 			VkViewport viewport = {};
 			viewport.x = 0.0f;
@@ -193,6 +200,12 @@ namespace vk
 		}
 
 		result = vertexBuffer.create();
+		if (result != VK_SUCCESS)
+		{
+			return result;
+		}
+
+		result = descriptor.create();
 		if (result != VK_SUCCESS)
 		{
 			return result;
@@ -299,6 +312,9 @@ namespace vk
 				return result;
 			}
 		}
+
+		view_proj.create();
+		descriptor.update(view_proj.m_buffer, view_proj.m_size);
 
 		for (uint32_t i = 0; i < VK_NUM_BUFFERS; i++)
 		{

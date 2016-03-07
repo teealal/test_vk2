@@ -9,7 +9,7 @@ namespace vk
 		Descriptor();
 		virtual ~Descriptor();
 
-		void create();
+		VkResult create();
 		void destroy();
 		void update(VkBuffer buffer, VkDeviceSize size);
 

@@ -175,6 +175,7 @@
     <ClInclude Include="vk\vk_semaphore.h" />
     <ClInclude Include="vk\vk_shader.h" />
     <ClInclude Include="vk\vk_swapchain.h" />
+    <ClInclude Include="vk\vk_uniformBuffer.h" />
     <ClInclude Include="vk\vk_vertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -202,6 +203,7 @@
     <ClCompile Include="vk\vk_semaphore.cpp" />
     <ClCompile Include="vk\vk_shader.cpp" />
     <ClCompile Include="vk\vk_swapchain.cpp" />
+    <ClCompile Include="vk\vk_uniformBuffer.cpp" />
     <ClCompile Include="vk\vk_vertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>

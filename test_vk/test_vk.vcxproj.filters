@@ -83,6 +83,9 @@
     <ClInclude Include="vk\vk_descriptor.h">
       <Filter>Source Files\vk</Filter>
     </ClInclude>
+    <ClInclude Include="vk\vk_uniformBuffer.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -143,6 +146,9 @@
       <Filter>Source Files\vk</Filter>
     </ClCompile>
     <ClCompile Include="vk\vk_descriptor.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_uniformBuffer.cpp">
       <Filter>Source Files\vk</Filter>
     </ClCompile>
   </ItemGroup>

@@ -17,7 +17,9 @@
 #include "vk_pipelineCache.h"
 #include "vk_pipelineLayout.h"
 #include "vk_pipeline.h"
+#include "vk_descriptor.h"
 #include "vk_vertexBuffer.h"
+#include "vk_uniformBuffer.h"
 #include "vk_shader.h"
 
 #define VK_NUM_BUFFERS		2

@@ -15,8 +15,61 @@ namespace vk
 	{
 	}
 
-	void Descriptor::create()
+	VkResult Descriptor::create()
 	{
+		VkResult result = VK_SUCCESS;
+
+		VkDescriptorPoolSize descriptorPoolSize[2];
+		memset(&descriptorPoolSize, 0, sizeof(descriptorPoolSize));
+		descriptorPoolSize[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+		descriptorPoolSize[0].descriptorCount = 1;
+		descriptorPoolSize[1].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+		descriptorPoolSize[1].descriptorCount = 1;
+
+		VkDescriptorPoolCreateInfo descriptorPoolCreateInfo;
+		memset(&descriptorPoolCreateInfo, 0, sizeof(VkDescriptorPoolCreateInfo));
+		descriptorPoolCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+		descriptorPoolCreateInfo.flags = 0;
+		descriptorPoolCreateInfo.maxSets = 1;
+		descriptorPoolCreateInfo.poolSizeCount = 1;
+		descriptorPoolCreateInfo.pPoolSizes = descriptorPoolSize;
+		VkDescriptorPool descriptorPool;
+		result = vkCreateDescriptorPool(getDevice(), &descriptorPoolCreateInfo, nullptr, &descriptorPool);
+		if (result != VK_SUCCESS)
+		{
+			return result;
+		}
+
+		VkDescriptorSetLayoutBinding descriptorSetLayoutBinding[2];
+		memset(&descriptorSetLayoutBinding, 0, sizeof(descriptorSetLayoutBinding));
+		descriptorSetLayoutBinding[0].binding = 0;
+		descriptorSetLayoutBinding[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+		descriptorSetLayoutBinding[0].descriptorCount = 1;
+		descriptorSetLayoutBinding[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+		descriptorSetLayoutBinding[0].pImmutableSamplers = nullptr;
+		descriptorSetLayoutBinding[1].binding = 1;
+		descriptorSetLayoutBinding[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+		descriptorSetLayoutBinding[1].descriptorCount = 1;
+		descriptorSetLayoutBinding[1].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+		descriptorSetLayoutBinding[1].pImmutableSamplers = nullptr;
+
+		VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCreateInfo = {};
+		descriptorSetLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+		descriptorSetLayoutCreateInfo.flags = 0;
+		descriptorSetLayoutCreateInfo.bindingCount = 2;
+		descriptorSetLayoutCreateInfo.pBindings = descriptorSetLayoutBinding;
+		result = vkCreateDescriptorSetLayout(getDevice(), &descriptorSetLayoutCreateInfo, nullptr, &m_descriptorSetLayout);
+		if (result != VK_SUCCESS)
+		{
+			return result;
+		}
+
+		VkDescriptorSetAllocateInfo descriptorSetAllocateInfo = {};
+		descriptorSetAllocateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+		descriptorSetAllocateInfo.descriptorPool = m_descriptorPool;
+		descriptorSetAllocateInfo.descriptorSetCount = 1;
+		descriptorSetAllocateInfo.pSetLayouts = &m_descriptorSetLayout;
+		return vkAllocateDescriptorSets(getDevice(), &descriptorSetAllocateInfo, &m_descriptorSet);
 	}
 
 	void Descriptor::destroy()
