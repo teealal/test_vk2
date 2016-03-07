@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\vk">
+      <UniqueIdentifier>{540ee66b-d98c-471a-a8fd-10d87f1d8a04}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Resource.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="test_vk.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vk\vk.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="vk\vk_framebuffer.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="vk\vk_device.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="vk\vk_instance.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="vk\vk_commandBuffer.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="vk\vk_renderPass.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="vk\vk_imageView.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="vk\vk_image.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="vk\vk_commandPool.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="vk\vk_queue.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="vk\vk_semaphore.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="vk\vk_swapchain.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_vk.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_framebuffer.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_device.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_instance.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_commandBuffer.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_imageView.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_renderPass.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_image.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_queue.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_commandPool.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_semaphore.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_swapchain.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="test_vk.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="test_vk.ico">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
