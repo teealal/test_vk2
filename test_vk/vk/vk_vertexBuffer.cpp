@@ -43,19 +43,6 @@ namespace vk
 		memoryAllocInfo.allocationSize = memoryRequirements.size;
 		memoryAllocInfo.memoryTypeIndex = 0;
 
-#if 0
-		if (!vkts::commonGetMemoryTypeIndex(VK_MAX_MEMORY_TYPES,
-			physicalDevice->getPhysicalDeviceMemoryProperties().memoryTypes,
-			memoryRequirements.memoryTypeBits,
-			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
-			memoryAllocInfo.memoryTypeIndex))
-		{
-			vkts::logPrint(VKTS_LOG_ERROR, "Example: Could not get memory type index.");
-
-			return VK_FALSE;
-		}
-#endif
-
 		void* mappedData;
 		result = vkAllocateMemory(getDevice(), &memoryAllocInfo, nullptr, &m_deviceMemoryVertexBuffer);
 		if (result != VK_SUCCESS)
@@ -69,7 +56,6 @@ namespace vk
 			return result;
 		}
 
-		// setup vertices.
 		memcpy(mappedData, vertices, sizeof(vertices));
 
 		vkUnmapMemory(getDevice(), m_deviceMemoryVertexBuffer);
