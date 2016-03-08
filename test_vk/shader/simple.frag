@@ -1,8 +1,13 @@
 #version 430 core
 
-layout (location = 0) out vec4 ob_fragColor;
+in vec3 v_normal;
 
-void main()
+layout(location = 0) out vec4 o_color;
+
+void main(void)
 {
-   ob_fragColor = vec4(0.0, 1.0, 1.0, 1.0);
+	vec3 normal = normalize(v_normal);
+	float n_dot_l = max(dot(vec3(1), normal), 0.0);
+
+	o_color = vec4(0.0, 0.0, 0.0, 1.0);
 }

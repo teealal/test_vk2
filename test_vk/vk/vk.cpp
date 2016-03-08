@@ -413,7 +413,7 @@ namespace vk
 			}
 		}
 
-		view_proj.create();
+		view_proj.create(sizeof(float) * 16, 2);
 		descriptor.update(view_proj.m_buffer, view_proj.m_size);
 
 		for (uint32_t i = 0; i < VK_NUM_BUFFERS; i++)
@@ -463,9 +463,8 @@ namespace vk
 			projectionMatrix = perspectiveMat4(45.0f, (float)1024 / (float)768, 1.0f, 100.0f);
 			viewMatrix = lookAtMat4(0.0f, 4.0f, 5.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
-
-			view
-
+			view_proj.upload(0, &projectionMatrix, sizeof(projectionMatrix));
+			view_proj.upload(1, &viewMatrix, sizeof(viewMatrix));
 
 			VkPipelineStageFlags waitDstStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
 

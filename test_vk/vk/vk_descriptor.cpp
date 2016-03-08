@@ -33,8 +33,7 @@ namespace vk
 		descriptorPoolCreateInfo.maxSets = 1;
 		descriptorPoolCreateInfo.poolSizeCount = 1;
 		descriptorPoolCreateInfo.pPoolSizes = descriptorPoolSize;
-		VkDescriptorPool descriptorPool;
-		result = vkCreateDescriptorPool(getDevice(), &descriptorPoolCreateInfo, nullptr, &descriptorPool);
+		result = vkCreateDescriptorPool(getDevice(), &descriptorPoolCreateInfo, nullptr, &m_descriptorPool);
 		if (result != VK_SUCCESS)
 		{
 			return result;
@@ -80,7 +79,6 @@ namespace vk
 	{
 		VkDescriptorBufferInfo descriptorBufferInfos[2];
 		memset(descriptorBufferInfos, 0, sizeof(descriptorBufferInfos));
-
 		descriptorBufferInfos[0].buffer = buffer;
 		descriptorBufferInfos[0].offset = 0;
 		descriptorBufferInfos[0].range = size;
@@ -88,7 +86,7 @@ namespace vk
 		VkWriteDescriptorSet writeDescriptorSets[2];
 		memset(writeDescriptorSets, 0, sizeof(writeDescriptorSets));
 		writeDescriptorSets[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		writeDescriptorSets[0].dstSet = VK_NULL_HANDLE;	// Defined later.
+		writeDescriptorSets[0].dstSet = m_descriptorSet;
 		writeDescriptorSets[0].dstBinding = 0;
 		writeDescriptorSets[0].dstArrayElement = 0;
 		writeDescriptorSets[0].descriptorCount = 1;
@@ -97,6 +95,6 @@ namespace vk
 		writeDescriptorSets[0].pBufferInfo = &descriptorBufferInfos[0];
 		writeDescriptorSets[0].pTexelBufferView = nullptr;
 
-		vkUpdateDescriptorSets(getDevice(), 2, writeDescriptorSets, 0, nullptr);
+		vkUpdateDescriptorSets(getDevice(), 1, writeDescriptorSets, 0, nullptr);
 	}
 }
