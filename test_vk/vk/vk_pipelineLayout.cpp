@@ -14,13 +14,13 @@ namespace vk
 		destroy();
 	}
 
-	VkResult PipelineLayout::create()
+	VkResult PipelineLayout::create(const VkDescriptorSetLayout* pSetLayout, uint32_t setLayoutCount)
 	{
 		VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo = {};
 		pipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 		pipelineLayoutCreateInfo.flags = 0;
-		pipelineLayoutCreateInfo.setLayoutCount = 0;
-		pipelineLayoutCreateInfo.pSetLayouts = nullptr;
+		pipelineLayoutCreateInfo.setLayoutCount = setLayoutCount;
+		pipelineLayoutCreateInfo.pSetLayouts = pSetLayout;
 		pipelineLayoutCreateInfo.pushConstantRangeCount = 0;
 		pipelineLayoutCreateInfo.pPushConstantRanges = nullptr;
 

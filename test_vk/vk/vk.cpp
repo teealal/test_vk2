@@ -210,8 +210,6 @@ namespace vk
 		{
 			vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.m_pipeline);
 
-			vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout.m_pipelineLayout, 0, 1, &descriptor.m_descriptorSet, 0, nullptr);
-
 			VkViewport viewport = {};
 			viewport.x = 0.0f;
 			viewport.y = 0.0f;
@@ -337,7 +335,7 @@ namespace vk
 			return result;
 		}
 
-		result = pipelineLayout.create();
+		result = pipelineLayout.create(&descriptor.m_descriptorSetLayout, 1);
 		if (result != VK_SUCCESS)
 		{
 			return result;
@@ -460,8 +458,8 @@ namespace vk
 			glm::mat4 projectionMatrix(1.0f);
 			glm::mat4 viewMatrix(1.0f);
 
-			projectionMatrix = perspectiveMat4(45.0f, (float)1024 / (float)768, 1.0f, 100.0f);
-			viewMatrix = lookAtMat4(0.0f, 4.0f, 5.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+			//projectionMatrix = perspectiveMat4(45.0f, (float)1024 / (float)768, 1.0f, 100.0f);
+			//viewMatrix = lookAtMat4(0.0f, 4.0f, 5.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
 			view_proj.upload(0, &projectionMatrix, sizeof(projectionMatrix));
 			view_proj.upload(1, &viewMatrix, sizeof(viewMatrix));
