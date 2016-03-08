@@ -9,7 +9,7 @@ namespace vk
 		PipelineLayout();
 		virtual ~PipelineLayout();
 
-		VkResult create(const VkDescriptorSetLayout* pSetLayout, uint32_t setLayoutCount);
+		VkResult create(uint32_t setLayoutCount, const VkDescriptorSetLayout* pSetLayout);
 		void destroy();
 
 		VkPipelineLayout	m_pipelineLayout;

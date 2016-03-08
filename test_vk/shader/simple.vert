@@ -20,5 +20,5 @@ out vec3 v_normal;
 void main(void)
 {
 //	v_normal = u_bufferTransform.normalMatrix * i_normal;
-	gl_Position = /*u_bufferViewProjection.projectionMatrix */ u_bufferViewProjection.projectionMatrix * i_vertex;
+	gl_Position = /*u_bufferViewProjection.projectionMatrix*/ u_bufferViewProjection.projectionMatrix * i_vertex;
 }

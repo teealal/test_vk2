@@ -28,7 +28,6 @@ namespace vk
 		m_size = size;
 
 		VkBufferCreateInfo bufferCreateInfo = {};
-		memset(&bufferCreateInfo, 0, sizeof(VkBufferCreateInfo));
 		bufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 		bufferCreateInfo.flags = 0;
 		bufferCreateInfo.size = getDeviceSize(size * count, 16);
@@ -50,7 +49,13 @@ namespace vk
 		memoryAllocInfo.allocationSize = m_memoryRequirements.size;
 		memoryAllocInfo.memoryTypeIndex = 0;
 
-		return vkAllocateMemory(getDevice(), &memoryAllocInfo, nullptr, &m_deviceMemory);
+		result = vkAllocateMemory(getDevice(), &memoryAllocInfo, nullptr, &m_deviceMemory);
+		if (result != VK_SUCCESS)
+		{
+			return result;
+		}
+
+		return vkBindBufferMemory(getDevice(), m_buffer, m_deviceMemory, 0);
 	}
 
 	VkResult UniformBuffer::upload(size_t offset, const void* data, size_t size)
@@ -67,7 +72,7 @@ namespace vk
 
 		vkUnmapMemory(getDevice(), m_deviceMemory);
 
-		return vkBindBufferMemory(getDevice(), m_buffer, m_deviceMemory, 0);
+		return result;
 	}
 
 	void UniformBuffer::destroy()

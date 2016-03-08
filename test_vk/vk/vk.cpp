@@ -1,6 +1,7 @@
 #include <fstream>
 #include <memory>
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include "vk.h"
 
 
@@ -17,6 +18,7 @@ namespace vk
 
 	RenderPass renderPass;
 	Swapchain swapchain;
+	DepthStencil depthStencil;
 
 	Framebuffer framebuffer[VK_NUM_BUFFERS];
 	ImageView imageView[VK_NUM_BUFFERS];
@@ -28,7 +30,9 @@ namespace vk
 	PipelineLayout pipelineLayout;
 	Pipeline pipeline;
 
-	Descriptor descriptor;
+	DescriptorPool descriptorPool;
+	DescriptorSetLayout descriptorSetLayout;
+	DescriptorSet descriptorSet;
 
 	Shader vertexShader;
 	Shader fragmentShader;
@@ -190,7 +194,7 @@ namespace vk
 
 		VkClearColorValue clearColorValue;
 		memset(&clearColorValue, 0, sizeof(VkClearColorValue));
-		clearColorValue.float32[0] = 1.0f;
+		clearColorValue.float32[0] = 0.9f;
 		clearColorValue.float32[1] = 1.0f;
 		clearColorValue.float32[2] = 1.0f;
 		clearColorValue.float32[3] = 1.0f;
@@ -303,7 +307,19 @@ namespace vk
 			return result;
 		}
 
-		result = descriptor.create();
+		result = descriptorPool.create();
+		if (result != VK_SUCCESS)
+		{
+			return result;
+		}
+
+		result = descriptorSetLayout.create();
+		if (result != VK_SUCCESS)
+		{
+			return result;
+		}
+
+		result = descriptorSet.create(descriptorPool.m_descriptorPool, 1, &descriptorSetLayout.m_descriptorSetLayout);
 		if (result != VK_SUCCESS)
 		{
 			return result;
@@ -335,7 +351,7 @@ namespace vk
 			return result;
 		}
 
-		result = pipelineLayout.create(&descriptor.m_descriptorSetLayout, 1);
+		result = pipelineLayout.create(1, &descriptorSetLayout.m_descriptorSetLayout);
 		if (result != VK_SUCCESS)
 		{
 			return result;
@@ -363,6 +379,12 @@ namespace vk
 		}
 
 		result = renderPass.create(format);
+		if (result != VK_SUCCESS)
+		{
+			return result;
+		}
+
+		result = depthStencil.create(VK_FORMAT_D16_UNORM, extent);
 		if (result != VK_SUCCESS)
 		{
 			return result;
@@ -412,7 +434,7 @@ namespace vk
 		}
 
 		view_proj.create(sizeof(float) * 16, 2);
-		descriptor.update(view_proj.m_buffer, view_proj.m_memoryRequirements.size);
+		descriptorSet.update(view_proj.m_buffer, view_proj.m_memoryRequirements.size);
 
 		for (uint32_t i = 0; i < VK_NUM_BUFFERS; i++)
 		{
@@ -422,7 +444,12 @@ namespace vk
 				return result;
 			}
 
-			result = framebuffer[i].create(extent.width, extent.height, renderPass.m_renderPass, &imageView[i].m_imageView);
+			VkImageView imageViews[2] = {
+				imageView[i].m_imageView,
+				depthStencil.m_imageView
+			};
+
+			result = framebuffer[i].create(extent.width, extent.height, renderPass.m_renderPass, 2, imageViews);
 			if (result != VK_SUCCESS)
 			{
 				return result;
@@ -461,7 +488,7 @@ namespace vk
 			//projectionMatrix = perspectiveMat4(45.0f, (float)1024 / (float)768, 1.0f, 100.0f);
 			//viewMatrix = lookAtMat4(0.0f, 4.0f, 5.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
-			view_proj.upload(0, &projectionMatrix, sizeof(projectionMatrix));
+			view_proj.upload(0, glm::value_ptr(projectionMatrix), sizeof(projectionMatrix));
 			view_proj.upload(1, &viewMatrix, sizeof(viewMatrix));
 
 			VkPipelineStageFlags waitDstStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;

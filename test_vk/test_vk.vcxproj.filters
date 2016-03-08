@@ -80,9 +80,6 @@
     <ClInclude Include="vk\vk_pipelineLayout.h">
       <Filter>Source Files\vk</Filter>
     </ClInclude>
-    <ClInclude Include="vk\vk_descriptor.h">
-      <Filter>Source Files\vk</Filter>
-    </ClInclude>
     <ClInclude Include="vk\vk_uniformBuffer.h">
       <Filter>Source Files\vk</Filter>
     </ClInclude>
@@ -93,6 +90,9 @@
       <Filter>Source Files\vk</Filter>
     </ClInclude>
     <ClInclude Include="vk\vk_descriptorPool.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="vk\vk_depthStencil.h">
       <Filter>Source Files\vk</Filter>
     </ClInclude>
   </ItemGroup>
@@ -154,9 +154,6 @@
     <ClCompile Include="vk\vk_pipelineCache.cpp">
       <Filter>Source Files\vk</Filter>
     </ClCompile>
-    <ClCompile Include="vk\vk_descriptor.cpp">
-      <Filter>Source Files\vk</Filter>
-    </ClCompile>
     <ClCompile Include="vk\vk_uniformBuffer.cpp">
       <Filter>Source Files\vk</Filter>
     </ClCompile>
@@ -167,6 +164,9 @@
       <Filter>Source Files\vk</Filter>
     </ClCompile>
     <ClCompile Include="vk\vk_descriptorSet.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_depthStencil.cpp">
       <Filter>Source Files\vk</Filter>
     </ClCompile>
   </ItemGroup>

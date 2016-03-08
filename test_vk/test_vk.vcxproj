@@ -162,7 +162,7 @@
     <ClInclude Include="vk\vk.h" />
     <ClInclude Include="vk\vk_commandBuffer.h" />
     <ClInclude Include="vk\vk_commandPool.h" />
-    <ClInclude Include="vk\vk_descriptor.h" />
+    <ClInclude Include="vk\vk_depthStencil.h" />
     <ClInclude Include="vk\vk_descriptorPool.h" />
     <ClInclude Include="vk\vk_descriptorSet.h" />
     <ClInclude Include="vk\vk_descriptorSetLayout.h" />
@@ -193,7 +193,7 @@
     <ClCompile Include="vk\vk.cpp" />
     <ClCompile Include="vk\vk_commandBuffer.cpp" />
     <ClCompile Include="vk\vk_commandPool.cpp" />
-    <ClCompile Include="vk\vk_descriptor.cpp" />
+    <ClCompile Include="vk\vk_depthStencil.cpp" />
     <ClCompile Include="vk\vk_descriptorPool.cpp" />
     <ClCompile Include="vk\vk_descriptorSet.cpp" />
     <ClCompile Include="vk\vk_descriptorSetLayout.cpp" />

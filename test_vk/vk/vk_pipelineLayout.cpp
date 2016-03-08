@@ -14,7 +14,7 @@ namespace vk
 		destroy();
 	}
 
-	VkResult PipelineLayout::create(const VkDescriptorSetLayout* pSetLayout, uint32_t setLayoutCount)
+	VkResult PipelineLayout::create(uint32_t setLayoutCount, const VkDescriptorSetLayout* pSetLayout)
 	{
 		VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo = {};
 		pipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;

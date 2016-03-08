@@ -107,6 +107,30 @@ namespace vk
 		pipelineMultisampleStateCreateInfo.alphaToCoverageEnable = VK_FALSE;
 		pipelineMultisampleStateCreateInfo.alphaToOneEnable = VK_FALSE;
 
+		VkPipelineDepthStencilStateCreateInfo pipelineDepthStencilStateCreateInfo = {};
+		pipelineDepthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+		pipelineDepthStencilStateCreateInfo.flags = 0;
+		pipelineDepthStencilStateCreateInfo.depthTestEnable = VK_TRUE;
+		pipelineDepthStencilStateCreateInfo.depthWriteEnable = VK_TRUE;
+		pipelineDepthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+		pipelineDepthStencilStateCreateInfo.depthBoundsTestEnable = VK_FALSE;
+		pipelineDepthStencilStateCreateInfo.stencilTestEnable = VK_FALSE;
+		pipelineDepthStencilStateCreateInfo.front.failOp = VK_STENCIL_OP_KEEP;
+		pipelineDepthStencilStateCreateInfo.front.passOp = VK_STENCIL_OP_KEEP;
+		pipelineDepthStencilStateCreateInfo.front.depthFailOp = VK_STENCIL_OP_KEEP;
+		pipelineDepthStencilStateCreateInfo.front.compareOp = VK_COMPARE_OP_NEVER;
+		pipelineDepthStencilStateCreateInfo.front.compareMask = 0;
+		pipelineDepthStencilStateCreateInfo.front.writeMask = 0;
+		pipelineDepthStencilStateCreateInfo.front.reference = 0;
+		pipelineDepthStencilStateCreateInfo.back.failOp = VK_STENCIL_OP_KEEP;
+		pipelineDepthStencilStateCreateInfo.back.passOp = VK_STENCIL_OP_KEEP;
+		pipelineDepthStencilStateCreateInfo.back.depthFailOp = VK_STENCIL_OP_KEEP;
+		pipelineDepthStencilStateCreateInfo.back.compareOp = VK_COMPARE_OP_NEVER;
+		pipelineDepthStencilStateCreateInfo.back.compareMask = 0;
+		pipelineDepthStencilStateCreateInfo.back.writeMask = 0;
+		pipelineDepthStencilStateCreateInfo.back.reference = 0;
+		pipelineDepthStencilStateCreateInfo.minDepthBounds = 0.0f;
+
 		VkPipelineColorBlendAttachmentState pipelineColorBlendAttachmentState = {};
 		pipelineColorBlendAttachmentState.blendEnable = VK_FALSE;
 		pipelineColorBlendAttachmentState.srcColorBlendFactor = VK_BLEND_FACTOR_ZERO;
@@ -147,7 +171,7 @@ namespace vk
 		graphicsPipelineCreateInfo.pViewportState = &pipelineViewportStateCreateInfo;
 		graphicsPipelineCreateInfo.pRasterizationState = &pipelineRasterizationStateCreateInfo;
 		graphicsPipelineCreateInfo.pMultisampleState = &pipelineMultisampleStateCreateInfo;
-		graphicsPipelineCreateInfo.pDepthStencilState = nullptr;
+		graphicsPipelineCreateInfo.pDepthStencilState = &pipelineDepthStencilStateCreateInfo;
 		graphicsPipelineCreateInfo.pColorBlendState = &pipelineColorBlendStateCreateInfo;
 		graphicsPipelineCreateInfo.pDynamicState = &pipelineDynamicStateCreateInfo;
 		graphicsPipelineCreateInfo.layout = pipelineLayout;
