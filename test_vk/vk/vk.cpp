@@ -313,7 +313,7 @@ namespace vk
 
 		{
 			size_t size;
-			void* raw = load_binary("vert.spv", &size);
+			void* raw = load_binary("simple.vspv", &size);
 			result = vertexShader.create(raw, size);
 			if (result != VK_SUCCESS)
 			{
@@ -323,7 +323,7 @@ namespace vk
 
 		{
 			size_t size;
-			void* raw = load_binary("frag.spv", &size);
+			void* raw = load_binary("simple.fspv", &size);
 			result = fragmentShader.create(raw, size);
 			if (result != VK_SUCCESS)
 			{
@@ -414,7 +414,7 @@ namespace vk
 		}
 
 		view_proj.create(sizeof(float) * 16, 2);
-		descriptor.update(view_proj.m_buffer, view_proj.m_size);
+		descriptor.update(view_proj.m_buffer, view_proj.m_memoryRequirements.size);
 
 		for (uint32_t i = 0; i < VK_NUM_BUFFERS; i++)
 		{
@@ -491,6 +491,5 @@ namespace vk
 			result = vkQueuePresentKHR(queue.m_queue, &presentInfo);
 			result = vkQueueWaitIdle(queue.m_queue);
 		}
-
 	}
 }

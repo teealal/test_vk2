@@ -16,7 +16,13 @@ namespace vk
 
 	VkResult VertexBuffer::create()
 	{
-		static const float vertices[3 * 4] = { -0.5f, 0.5f, 0.0f, 1.0f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, -0.5f, 0.0f, 1.0f };
+		// 
+		static const float vertices[3 * 4] =
+		{
+			-0.5f, 0.5f, 0.0f, 1.0f,
+			 0.5f, 0.5f, 0.0f, 1.0f,
+			 0.0f,-0.5f, 0.0f, 1.0f
+		};
 
 		VkResult result = VK_SUCCESS;
 
@@ -71,5 +77,6 @@ namespace vk
 
 	void VertexBuffer::destroy()
 	{
+		vkDestroyBuffer(getDevice(), m_vertexBuffer, nullptr);
 	}
 }
