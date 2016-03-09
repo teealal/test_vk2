@@ -29,6 +29,11 @@ namespace vk
 
 	void DescriptorSet::destroy()
 	{
+		if (m_descriptorSet != VK_NULL_HANDLE)
+		{
+			// vkFreeDescriptorSets(getDevice(), descriptorPool, descriptorSetCount, &m_descriptorSet);
+			m_descriptorSet = VK_NULL_HANDLE;
+		}
 	}
 
 	void DescriptorSet::update(VkBuffer buffer, VkDeviceSize size)

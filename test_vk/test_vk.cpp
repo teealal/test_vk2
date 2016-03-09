@@ -7,6 +7,7 @@
 HINSTANCE hInst;
 WCHAR szTitle[MAX_LOADSTRING];
 WCHAR szWindowClass[MAX_LOADSTRING];
+BOOL bActive = FALSE;
 
 ATOM				MyRegisterClass(HINSTANCE hInstance);
 BOOL				InitInstance(HINSTANCE, int);
@@ -32,18 +33,40 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_TEST_VK));
 
+	BOOL bGotMsg = FALSE;
 	MSG msg;
+	msg.message = WM_NULL;
 
-	while (GetMessage(&msg, nullptr, 0, 0))
+	PeekMessage(&msg, NULL, 0U, 0U, PM_NOREMOVE);
+
+	while (WM_QUIT != msg.message)
 	{
-		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+		if (bActive)
+		{
+			bGotMsg = PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE);
+		}
+		else {
+			bGotMsg = GetMessage(&msg, NULL, 0U, 0U);
+		}
+
+		if (bGotMsg)
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
+		else
+		{
+			// •`‰æ
+			vk::render();
+
+			if (GetKeyState(VK_ESCAPE) < 0)
+			{
+				SendMessage(msg.hwnd, WM_CLOSE, NULL, NULL);
+			}
+		}
 	}
 
-	return (int)msg.wParam;
+	return static_cast<int>(msg.wParam);
 }
 
 
@@ -66,35 +89,6 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
 	return RegisterClassExW(&wcex);
-}
-
-
-INT Run()
-{
-	BOOL	bGotMsg = FALSE;
-	MSG		msg;
-	msg.message = WM_NULL;
-
-	PeekMessage(&msg, NULL, 0U, 0U, PM_NOREMOVE);
-
-	while (WM_QUIT != msg.message)
-	{
-		bGotMsg = PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE);
-
-		if (bGotMsg)
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else
-		{
-
-			// •`‰æ
-			vk::render();
-		}
-	}
-
-	return (INT)msg.wParam;
 }
 
 //
@@ -162,7 +156,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	}
 
 	ShowWindow(hWnd, nCmdShow);
-	Run();
 
 	return TRUE;
 }
@@ -171,6 +164,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
+	case WM_ACTIVATEAPP:
+		bActive = (BOOL)LOWORD(wParam);
+		break;
 	case WM_COMMAND:
 	{
 		int wmId = LOWORD(wParam);

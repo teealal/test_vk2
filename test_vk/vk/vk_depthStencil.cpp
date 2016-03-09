@@ -21,7 +21,7 @@ namespace vk
 		imageCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 		imageCreateInfo.flags = 0;
 		imageCreateInfo.imageType = VK_IMAGE_TYPE_2D;
-		imageCreateInfo.format = VK_FORMAT_D16_UNORM;	// format
+		imageCreateInfo.format = format;
 		imageCreateInfo.extent = { extent.width, extent.height, 1 };
 		imageCreateInfo.mipLevels = 1;
 		imageCreateInfo.arrayLayers = 1;
@@ -73,7 +73,16 @@ namespace vk
 
 	void DepthStencil::destroy()
 	{
-		vkDestroyImageView(getDevice(), m_imageView, nullptr);
-		vkDestroyImage(getDevice(), m_image, nullptr);
+		if (m_imageView != VK_NULL_HANDLE)
+		{
+			vkDestroyImageView(getDevice(), m_imageView, nullptr);
+			m_imageView = VK_NULL_HANDLE;
+		}
+
+		if (m_image != VK_NULL_HANDLE)
+		{
+			vkDestroyImage(getDevice(), m_image, nullptr);
+			m_image = VK_NULL_HANDLE;
+		}
 	}
 }

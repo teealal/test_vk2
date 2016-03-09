@@ -11,6 +11,7 @@ namespace vk
 
 	DescriptorSetLayout::~DescriptorSetLayout()
 	{
+		destroy();
 	}
 
 	VkResult DescriptorSetLayout::create()
@@ -32,5 +33,10 @@ namespace vk
 
 	void DescriptorSetLayout::destroy()
 	{
+		if (m_descriptorSetLayout != VK_NULL_HANDLE)
+		{
+			vkDestroyDescriptorSetLayout(getDevice(), &m_descriptorSetLayout, nullptr);
+			m_descriptorSetLayout = VK_NULL_HANDLE;
+		}
 	}
 }

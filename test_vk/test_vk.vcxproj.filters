@@ -95,6 +95,9 @@
     <ClInclude Include="vk\vk_depthStencil.h">
       <Filter>Source Files\vk</Filter>
     </ClInclude>
+    <ClInclude Include="model.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -168,6 +171,9 @@
     </ClCompile>
     <ClCompile Include="vk\vk_depthStencil.cpp">
       <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="model.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
