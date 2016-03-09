@@ -108,9 +108,9 @@ namespace vk
 
 				for (uint32_t i = 0; i < header.numVerts; i++)
 				{
-					mapped[i].x = vertices[i].x * 0.1f;
-					mapped[i].y = vertices[i].y * 0.1f;
-					mapped[i].z = vertices[i].z * 0.1f;
+					mapped[i].x = vertices[i].x;
+					mapped[i].y = vertices[i].y;
+					mapped[i].z = vertices[i].z;
 
 					mapped[i].nx = 0.0f;
 					mapped[i].ny = 1.0f;

@@ -403,7 +403,7 @@ namespace vk
 			glm::mat4 projectionMatrix(1.0f);
 			glm::mat4 viewMatrix(1.0f);
 
-			projectionMatrix = glm::perspective(glm::radians(60.0f), (float)1024 / (float)768, 0.1f, 256.0f);
+			projectionMatrix = glm::perspective(glm::radians(45.0f), (float)1024 / (float)768, 0.1f, 1000.0f);
 
 			static float rot_x;
 			static float rot_y;
@@ -423,9 +423,9 @@ namespace vk
 
 				op = np;
 			}
-			float len = 3.0f;
+			float len = 50.0f;
 
-			glm::vec3 eye(len * sin(rot_x) * cos(rot_y), sin(rot_y), len * cos(rot_x) * cos(rot_y));
+			glm::vec3 eye(len * sin(rot_x) * cos(rot_y), len * cos(rot_x) * sin(rot_y), len * cos(rot_x) * cos(rot_y));
 			glm::vec3 center(0.0f, 0.0f, 0.0f);
 			glm::vec3 up(0.0f, 1.0f, 0.0);
 			
