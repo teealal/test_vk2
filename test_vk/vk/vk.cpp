@@ -252,7 +252,7 @@ namespace vk
 		}
 
 		{
-			model.create("plane.mf0");
+			model.create("teapot.mf0");
 		}
 
 		result = pipelineCache.create();
@@ -405,9 +405,11 @@ namespace vk
 
 			projectionMatrix = glm::perspective(glm::radians(45.0f), (float)1024 / (float)768, 0.1f, 1000.0f);
 
+			static float zoom = 200.0f;
 			static float rot_x;
 			static float rot_y;
 			static POINT op = {};
+			static POINT zp = {};
 			POINT np;
 
 			if (GetKeyState(VK_LBUTTON) < 0)
@@ -423,13 +425,27 @@ namespace vk
 
 				op = np;
 			}
-			float len = 50.0f;
 
-			glm::vec3 eye(len * sin(rot_x) * cos(rot_y), len * cos(rot_x) * sin(rot_y), len * cos(rot_x) * cos(rot_y));
+			if (GetKeyState(VK_RBUTTON) < 0)
+			{
+				GetCursorPos(&np);
+				if (zp.x == 0 && zp.y == 0)
+				{
+					zp = np;
+				}
+
+				zoom -= (float)(zp.y - np.y) / 10.0f;
+
+				zp = np;
+			}
+
+			glm::vec3 eye(0.0f, 0.0f, zoom);
 			glm::vec3 center(0.0f, 0.0f, 0.0f);
 			glm::vec3 up(0.0f, 1.0f, 0.0);
 			
 			viewMatrix = glm::lookAt(eye, center, up);
+			viewMatrix = glm::rotate(viewMatrix, rot_x, glm::vec3(0.0f, 1.0f, 0.0f));
+			viewMatrix = glm::rotate(viewMatrix, rot_y, glm::vec3(1.0f, 0.0f, 0.0f));
 
 			uniform.solid[0] = projectionMatrix;
 			uniform.solid[1] = viewMatrix;

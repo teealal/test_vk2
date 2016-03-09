@@ -56,7 +56,7 @@ namespace vk
 			fin.read(reinterpret_cast<char*>(&header), sizeof(header));
 
 			m_bindingDescriptions[0].binding = 0;
-			m_bindingDescriptions[0].stride = sizeof(ResVec3);
+			m_bindingDescriptions[0].stride = sizeof(Vertex);
 			m_bindingDescriptions[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
 			m_attributeDescriptions[0].binding = 0;
