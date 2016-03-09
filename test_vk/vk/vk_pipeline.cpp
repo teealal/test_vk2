@@ -19,6 +19,7 @@ namespace vk
 		VkShaderModule fragmentShaderModule,
 		VkPipelineCache pipelineCache,
 		VkPipelineLayout pipelineLayout,
+		VkPipelineVertexInputStateCreateInfo* pVertexInputInfo,
 		const VkExtent2D& extent)
 	{
 		VkPipelineShaderStageCreateInfo pipelineShaderStageCreateInfo[2];
@@ -47,14 +48,6 @@ namespace vk
 		vertexInputAttributeDescription.binding = 0;
 		vertexInputAttributeDescription.format = VK_FORMAT_R32G32B32A32_SFLOAT;
 		vertexInputAttributeDescription.offset = 0;
-
-		VkPipelineVertexInputStateCreateInfo pipelineVertexInputCreateInfo = {};
-		pipelineVertexInputCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-		pipelineVertexInputCreateInfo.flags = 0;
-		pipelineVertexInputCreateInfo.vertexBindingDescriptionCount = 1;
-		pipelineVertexInputCreateInfo.pVertexBindingDescriptions = &vertexInputBindingDescription;
-		pipelineVertexInputCreateInfo.vertexAttributeDescriptionCount = 1;
-		pipelineVertexInputCreateInfo.pVertexAttributeDescriptions = &vertexInputAttributeDescription;
 
 		VkPipelineInputAssemblyStateCreateInfo pipelineInputAssemblyStateCreateInfo = {};
 		pipelineInputAssemblyStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -165,7 +158,7 @@ namespace vk
 		graphicsPipelineCreateInfo.flags = 0;
 		graphicsPipelineCreateInfo.stageCount = 2;
 		graphicsPipelineCreateInfo.pStages = pipelineShaderStageCreateInfo;
-		graphicsPipelineCreateInfo.pVertexInputState = &pipelineVertexInputCreateInfo;
+		graphicsPipelineCreateInfo.pVertexInputState = pVertexInputInfo;
 		graphicsPipelineCreateInfo.pInputAssemblyState = &pipelineInputAssemblyStateCreateInfo;
 		graphicsPipelineCreateInfo.pTessellationState = nullptr;
 		graphicsPipelineCreateInfo.pViewportState = &pipelineViewportStateCreateInfo;

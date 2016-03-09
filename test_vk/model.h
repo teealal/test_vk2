@@ -32,11 +32,15 @@ public:
 
 	void load(const std::string& filepath);
 
-private:
-
 	Header	m_header;
 	vec3*	m_vertices;
 	Face*	m_faces;
+
+	VkBuffer m_buffer;
+	VkDeviceMemory m_deviceMemory;
+	VkPipelineVertexInputStateCreateInfo m_inputs;
+	VkVertexInputBindingDescription bindingDescriptions;
+	VkVertexInputAttributeDescription attributeDescriptions;
 };
 
 #endif

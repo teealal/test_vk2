@@ -95,8 +95,11 @@
     <ClInclude Include="vk\vk_depthStencil.h">
       <Filter>Source Files\vk</Filter>
     </ClInclude>
-    <ClInclude Include="model.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="vk\vk_model.h">
+      <Filter>Source Files\vk</Filter>
+    </ClInclude>
+    <ClInclude Include="vk\vk_utility.h">
+      <Filter>Source Files\vk</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -172,8 +175,11 @@
     <ClCompile Include="vk\vk_depthStencil.cpp">
       <Filter>Source Files\vk</Filter>
     </ClCompile>
-    <ClCompile Include="model.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="vk\vk_model.cpp">
+      <Filter>Source Files\vk</Filter>
+    </ClCompile>
+    <ClCompile Include="vk\vk_utility.cpp">
+      <Filter>Source Files\vk</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

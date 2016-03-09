@@ -4,11 +4,6 @@
 
 namespace vk
 {
-	VkDeviceSize getDeviceSize(size_t currentSize, size_t stride)
-	{
-		return VkDeviceSize((currentSize / stride) * stride + ((currentSize % stride) > 0 ? stride : 0));
-	}
-
 	UniformBuffer::UniformBuffer()
 		: m_buffer(VK_NULL_HANDLE)
 		, m_deviceMemory(VK_NULL_HANDLE)
@@ -21,16 +16,14 @@ namespace vk
 		destroy();
 	}
 
-	VkResult UniformBuffer::create(uint32_t size, uint32_t count)
+	VkResult UniformBuffer::create(uint32_t size)
 	{
 		VkResult result = VK_SUCCESS;
-
-		m_size = size;
 
 		VkBufferCreateInfo bufferCreateInfo = {};
 		bufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 		bufferCreateInfo.flags = 0;
-		bufferCreateInfo.size = getDeviceSize(size * count, 16);
+		bufferCreateInfo.size = getDeviceSize(size, 16);
 		bufferCreateInfo.usage = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT;
 		bufferCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 		bufferCreateInfo.queueFamilyIndexCount = 0;
@@ -62,7 +55,7 @@ namespace vk
 	{
 		void* mappedData = nullptr;
 
-		VkResult result = vkMapMemory(getDevice(), m_deviceMemory, offset * m_size, m_memoryRequirements.size, 0, &mappedData);
+		VkResult result = vkMapMemory(getDevice(), m_deviceMemory, offset, m_memoryRequirements.size, 0, &mappedData);
 		if (result != VK_SUCCESS)
 		{
 			return result;

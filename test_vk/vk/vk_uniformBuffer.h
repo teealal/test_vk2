@@ -9,7 +9,7 @@ namespace vk
 		UniformBuffer();
 		virtual ~UniformBuffer();
 
-		VkResult create(uint32_t size, uint32_t count = 1);
+		VkResult create(uint32_t size);
 		void destroy();
 
 		VkResult upload(size_t offset, const void* data, size_t size);

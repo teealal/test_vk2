@@ -1,7 +1,6 @@
-#include <fstream>
-#include <memory>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include "vk.h"
 
 
@@ -24,8 +23,6 @@ namespace vk
 	ImageView imageView[VK_NUM_BUFFERS];
 	CommandBuffer commandBuffer[VK_NUM_BUFFERS];
 
-	VertexBuffer vertexBuffer;
-
 	PipelineCache pipelineCache;
 	PipelineLayout pipelineLayout;
 	Pipeline pipeline;
@@ -39,105 +36,7 @@ namespace vk
 
 	UniformBuffer view_proj;
 
-	glm::mat4 frustumMat4(const float left, const float right, const float bottom, const float top, const float nearVal, const float farVal)
-	{
-		if ((right - left) == 0.0f || (top - bottom) == 0.0f || (farVal - nearVal) == 0.0f)
-		{
-			return glm::mat4();
-		}
-
-		glm::mat4 result;
-
-		result[0][0] = 2.0f * nearVal / (right - left);
-		result[0][1] = 0.0f;
-		result[0][2] = 0.0f;
-		result[0][3] = 0.0f;
-		result[1][0] = 0.0f;
-		// Window clip origin is upper left.
-		result[1][1] = -2.0f * nearVal / (top - bottom);
-		result[1][2] = 0.0f;
-		result[1][3] = 0.0f;
-		result[2][0] = (right + left) / (right - left);
-		result[2][1] = (top + bottom) / (top - bottom);
-		result[2][2] = -(farVal + nearVal) / (farVal - nearVal);
-		result[2][3] = -1.0f;
-		result[3][0] = 0.0f;
-		result[3][1] = 0.0f;
-		result[3][2] = -(2.0f * farVal * nearVal) / (farVal - nearVal);
-		result[3][3] = 0.0f;
-
-		return result;
-	}
-
-	glm::mat4 perspectiveMat4(const float fovy, const float aspect, const float zNear, const float zFar)
-	{
-		if (fovy <= 0.0f || fovy >= 180.0f)
-		{
-			return glm::mat4();
-		}
-
-		float xmin, xmax, ymin, ymax;
-
-		ymax = zNear * tanf(glm::radians(fovy * 0.5f));
-		ymin = -ymax;
-		xmin = ymin * aspect;
-		xmax = ymax * aspect;
-
-		return frustumMat4(xmin, xmax, ymin, ymax, zNear, zFar);
-	}
-
-	glm::mat4 lookAtMat4(const float eyeX, const float eyeY, const float eyeZ, const float centerX, const float centerY, const float centerZ, const float upX, const float upY, const float upZ)
-	{
-		glm::vec3 forward;
-		glm::vec3 side;
-		glm::vec3 up;
-
-		forward[0] = centerX - eyeX;
-		forward[1] = centerY - eyeY;
-		forward[2] = centerZ - eyeZ;
-
-		forward = glm::normalize(forward);
-
-		up[0] = upX;
-		up[1] = upY;
-		up[2] = upZ;
-
-		side = glm::cross(forward, up);
-		side = glm::normalize(side);
-
-		up = glm::cross(side, forward);
-
-		glm::mat4 result;
-
-		result[0][0] = side[0];
-		result[0][1] = up[0];
-		result[0][2] = -forward[0];
-		result[0][3] = 0.0f;
-		result[1][0] = side[1];
-		result[1][1] = up[1];
-		result[1][2] = -forward[1];
-		result[1][3] = 0.0f;
-		result[2][0] = side[2];
-		result[2][1] = up[2];
-		result[2][2] = -forward[2];
-		result[2][3] = 0.0f;
-		result[3][0] = 0.0f;
-		result[3][1] = 0.0f;
-		result[3][2] = 0.0f;
-		result[3][3] = 1.0f;
-
-		glm::mat4 translate(1.0f);
-		translate[3][0] = -eyeX;
-		translate[3][1] = -eyeY;
-		translate[3][2] = -eyeZ;
-
-		return result * translate;
-	}
-
-	glm::mat4 lookAtMat4(const glm::vec4& eye, const glm::vec4& center, const glm::vec3& up)
-	{
-		return lookAtMat4(eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z);
-	}
+	Model model;
 
 	char* load_binary(const char* path, size_t* p_size = nullptr)
 	{
@@ -198,7 +97,10 @@ namespace vk
 		clearColorValue.float32[1] = 1.0f;
 		clearColorValue.float32[2] = 1.0f;
 		clearColorValue.float32[3] = 1.0f;
-		VkClearValue clearValues[1] = { clearColorValue };
+		VkClearValue clearValues[2];
+		clearValues[0].color = clearColorValue;
+		clearValues[1].depthStencil = { 1.0f, 0 };
+
 		VkRenderPassBeginInfo renderPassBeginInfo;
 		memset(&renderPassBeginInfo, 0, sizeof(VkRenderPassBeginInfo));
 		renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -207,11 +109,13 @@ namespace vk
 		renderPassBeginInfo.renderArea.offset.x = 0;
 		renderPassBeginInfo.renderArea.offset.y = 0;
 		renderPassBeginInfo.renderArea.extent = extent;
-		renderPassBeginInfo.clearValueCount = 1;
+		renderPassBeginInfo.clearValueCount = 2;
 		renderPassBeginInfo.pClearValues = clearValues;
 		vkCmdBeginRenderPass(commandBuffer, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
 		{
+			vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout.m_pipelineLayout, 0, 1, &descriptorSet.m_descriptorSet, 0, NULL);
+
 			vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.m_pipeline);
 
 			VkViewport viewport = {};
@@ -229,9 +133,11 @@ namespace vk
 			scissor.extent = extent;
 			vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
-			VkDeviceSize offsets[1] = { 0 };
-			vkCmdBindVertexBuffers(commandBuffer, 0, 1, &vertexBuffer.m_vertexBuffer, offsets);
-			vkCmdDraw(commandBuffer, 3, 1, 0, 0);
+			model.draw(commandBuffer);
+			//VkDeviceSize offsets[1] = { 0 };
+			//vkCmdBindVertexBuffers(commandBuffer, 0, 1, &vertexBuffer.m_vertexBuffer, offsets);
+			//vkCmdDraw(commandBuffer, 3, 1, 0, 0);
+			// vkCmdDrawIndexed(commandBuffer, )
 		}
 
 		vkCmdEndRenderPass(commandBuffer);
@@ -301,11 +207,11 @@ namespace vk
 			return result;
 		}
 
-		result = vertexBuffer.create();
-		if (result != VK_SUCCESS)
-		{
-			return result;
-		}
+		//result = vertexBuffer.create();
+		//if (result != VK_SUCCESS)
+		//{
+		//	return result;
+		//}
 
 		result = descriptorPool.create();
 		if (result != VK_SUCCESS)
@@ -345,6 +251,10 @@ namespace vk
 			}
 		}
 
+		{
+			model.create("sphere.mf0");
+		}
+
 		result = pipelineCache.create();
 		if (result != VK_SUCCESS)
 		{
@@ -366,6 +276,7 @@ namespace vk
 			fragmentShader.m_shaderModule,
 			pipelineCache.m_pipelineCache,
 			pipelineLayout.m_pipelineLayout,
+			model.getVertexInputInfoPtr(),
 			extent);
 		if (result != VK_SUCCESS)
 		{
@@ -433,7 +344,9 @@ namespace vk
 			}
 		}
 
-		view_proj.create(sizeof(float) * 16, 2);
+		view_proj.create(sizeof(float) * 16 * 2);
+
+		// store information in the uniform's descriptor
 		descriptorSet.update(view_proj.m_buffer, view_proj.m_memoryRequirements.size);
 
 		for (uint32_t i = 0; i < VK_NUM_BUFFERS; i++)
@@ -482,14 +395,21 @@ namespace vk
 
 		if (result == VK_SUCCESS || result == VK_SUBOPTIMAL_KHR)
 		{
+			struct
+			{
+				glm::mat4 solid[2];
+			} uniform;
+
 			glm::mat4 projectionMatrix(1.0f);
 			glm::mat4 viewMatrix(1.0f);
 
-			//projectionMatrix = perspectiveMat4(45.0f, (float)1024 / (float)768, 1.0f, 100.0f);
-			//viewMatrix = lookAtMat4(0.0f, 4.0f, 5.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+			projectionMatrix = glm::perspective(glm::radians(60.0f), (float)1024 / (float)768, 0.1f, 256.0f);
+			viewMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -2.5f));
 
-			view_proj.upload(0, glm::value_ptr(projectionMatrix), sizeof(projectionMatrix));
-			view_proj.upload(1, &viewMatrix, sizeof(viewMatrix));
+			uniform.solid[0] = projectionMatrix;
+			uniform.solid[1] = viewMatrix;
+
+			view_proj.upload(0, &uniform, sizeof(uniform));
 
 			VkPipelineStageFlags waitDstStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
 

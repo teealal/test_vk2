@@ -155,7 +155,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="model.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -172,6 +171,7 @@
     <ClInclude Include="vk\vk_image.h" />
     <ClInclude Include="vk\vk_imageView.h" />
     <ClInclude Include="vk\vk_instance.h" />
+    <ClInclude Include="vk\vk_model.h" />
     <ClInclude Include="vk\vk_pipeline.h" />
     <ClInclude Include="vk\vk_pipelineCache.h" />
     <ClInclude Include="vk\vk_pipelineLayout.h" />
@@ -181,10 +181,10 @@
     <ClInclude Include="vk\vk_shader.h" />
     <ClInclude Include="vk\vk_swapchain.h" />
     <ClInclude Include="vk\vk_uniformBuffer.h" />
+    <ClInclude Include="vk\vk_utility.h" />
     <ClInclude Include="vk\vk_vertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="model.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -204,6 +204,7 @@
     <ClCompile Include="vk\vk_image.cpp" />
     <ClCompile Include="vk\vk_imageView.cpp" />
     <ClCompile Include="vk\vk_instance.cpp" />
+    <ClCompile Include="vk\vk_model.cpp" />
     <ClCompile Include="vk\vk_pipeline.cpp" />
     <ClCompile Include="vk\vk_pipelineCache.cpp" />
     <ClCompile Include="vk\vk_pipelineLayout.cpp" />
@@ -213,6 +214,7 @@
     <ClCompile Include="vk\vk_shader.cpp" />
     <ClCompile Include="vk\vk_swapchain.cpp" />
     <ClCompile Include="vk\vk_uniformBuffer.cpp" />
+    <ClCompile Include="vk\vk_utility.cpp" />
     <ClCompile Include="vk\vk_vertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>

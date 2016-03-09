@@ -1,8 +1,15 @@
 #pragma once
 
+#include <string>
+#include <vector>
+#include <fstream>
+#include <memory>
+#include <array>
+
 #define VK_USE_PLATFORM_WIN32_KHR
 #include <vulkan/vulkan.h>
 
+#include "vk_utility.h"
 #include "vk_instance.h"
 #include "vk_device.h"
 #include "vk_framebuffer.h"
@@ -24,6 +31,7 @@
 #include "vk_vertexBuffer.h"
 #include "vk_uniformBuffer.h"
 #include "vk_shader.h"
+#include "vk_model.h"
 
 #define VK_NUM_BUFFERS		2
 

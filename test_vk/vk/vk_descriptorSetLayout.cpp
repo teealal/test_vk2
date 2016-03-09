@@ -35,7 +35,7 @@ namespace vk
 	{
 		if (m_descriptorSetLayout != VK_NULL_HANDLE)
 		{
-			vkDestroyDescriptorSetLayout(getDevice(), &m_descriptorSetLayout, nullptr);
+			vkDestroyDescriptorSetLayout(getDevice(), m_descriptorSetLayout, nullptr);
 			m_descriptorSetLayout = VK_NULL_HANDLE;
 		}
 	}
