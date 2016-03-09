@@ -252,7 +252,7 @@ namespace vk
 		}
 
 		{
-			model.create("sphere.mf0");
+			model.create("plane.mf0");
 		}
 
 		result = pipelineCache.create();
@@ -404,7 +404,32 @@ namespace vk
 			glm::mat4 viewMatrix(1.0f);
 
 			projectionMatrix = glm::perspective(glm::radians(60.0f), (float)1024 / (float)768, 0.1f, 256.0f);
-			viewMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, -2.5f));
+
+			static float rot_x;
+			static float rot_y;
+			static POINT op = {};
+			POINT np;
+
+			if (GetKeyState(VK_LBUTTON) < 0)
+			{
+				GetCursorPos(&np);
+				if (op.x == 0 && op.y == 0)
+				{
+					op = np;
+				}
+
+				rot_x -= (float)(op.x - np.x) / 90.0f;
+				rot_y -= (float)(op.y - np.y) / 90.0f;
+
+				op = np;
+			}
+			float len = 3.0f;
+
+			glm::vec3 eye(len * sin(rot_x) * cos(rot_y), sin(rot_y), len * cos(rot_x) * cos(rot_y));
+			glm::vec3 center(0.0f, 0.0f, 0.0f);
+			glm::vec3 up(0.0f, 1.0f, 0.0);
+			
+			viewMatrix = glm::lookAt(eye, center, up);
 
 			uniform.solid[0] = projectionMatrix;
 			uniform.solid[1] = viewMatrix;

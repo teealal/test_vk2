@@ -71,6 +71,7 @@ namespace vk
 
 			m_vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 			m_vertexInputInfo.pNext = NULL;
+			m_vertexInputInfo.flags = 0;
 			m_vertexInputInfo.vertexBindingDescriptionCount = 1;
 			m_vertexInputInfo.pVertexBindingDescriptions = &m_bindingDescriptions[0];
 			m_vertexInputInfo.vertexAttributeDescriptionCount = 2;
@@ -107,12 +108,12 @@ namespace vk
 
 				for (uint32_t i = 0; i < header.numVerts; i++)
 				{
-					mapped[i].x = vertices[i].x * 0.0f;
-					mapped[i].y = vertices[i].y * 0.0f;
-					mapped[i].z = vertices[i].z * 0.0f;
+					mapped[i].x = vertices[i].x * 0.1f;
+					mapped[i].y = vertices[i].y * 0.1f;
+					mapped[i].z = vertices[i].z * 0.1f;
 
 					mapped[i].nx = 0.0f;
-					mapped[i].ny = 0.0f;
+					mapped[i].ny = 1.0f;
 					mapped[i].nz = 0.0f;
 				}
 
@@ -175,7 +176,7 @@ namespace vk
 	{
 		VkDeviceSize offsets[1] = { 0 };
 		vkCmdBindVertexBuffers(commandBuffer, 0, 1, &m_vertices.buffer, offsets);
-		vkCmdBindIndexBuffer(commandBuffer, m_vertices.buffer, 0, VK_INDEX_TYPE_UINT32);
+		vkCmdBindIndexBuffer(commandBuffer, m_indices.buffer, 0, VK_INDEX_TYPE_UINT32);
 		vkCmdDrawIndexed(commandBuffer, m_indexCount, 1, 0, 0, 1);
 	}
 }

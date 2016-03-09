@@ -13,6 +13,6 @@ out vec3 v_normal;
 
 void main(void)
 {
-//	v_normal = u_bufferTransform.normalMatrix * i_normal;
+	v_normal = i_normal;
 	gl_Position = ubo.projectionMatrix * ubo.viewMatrix * vec4(i_vertex, 1.0);
 }
