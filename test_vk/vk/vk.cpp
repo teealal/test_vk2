@@ -37,6 +37,7 @@ namespace vk
 	UniformBuffer view_proj;
 
 	Model model;
+	VkExtent2D windowSize;
 
 	char* load_binary(const char* path, size_t* p_size = nullptr)
 	{
@@ -93,8 +94,8 @@ namespace vk
 
 		VkClearColorValue clearColorValue;
 		memset(&clearColorValue, 0, sizeof(VkClearColorValue));
-		clearColorValue.float32[0] = 0.9f;
-		clearColorValue.float32[1] = 1.0f;
+		clearColorValue.float32[0] = 0.5f;
+		clearColorValue.float32[1] = 0.8f;
 		clearColorValue.float32[2] = 1.0f;
 		clearColorValue.float32[3] = 1.0f;
 		VkClearValue clearValues[2];
@@ -158,6 +159,9 @@ namespace vk
 
 	VkResult initialize(HINSTANCE nativeDisplay, HWND nativeWindow)
 	{
+		RECT rc = {};
+		GetWindowRect(nativeWindow, &rc);
+
 		VkResult result = VK_SUCCESS;
 
 		result = instance.create();
@@ -252,7 +256,7 @@ namespace vk
 		}
 
 		{
-			model.create("teapot.mf0");
+			model.create("sphere.mf0");
 		}
 
 		result = pipelineCache.create();
@@ -267,7 +271,12 @@ namespace vk
 			return result;
 		}
 
-		VkExtent2D extent = { 1024, 768 };
+		windowSize =
+		{
+			uint32_t(rc.right - rc.left),
+			uint32_t(rc.bottom - rc.top)
+		};
+
 		const VkFormat format = VK_FORMAT_B8G8R8A8_UNORM;
 
 		result = pipeline.create(
@@ -277,13 +286,13 @@ namespace vk
 			pipelineCache.m_pipelineCache,
 			pipelineLayout.m_pipelineLayout,
 			model.getVertexInputInfoPtr(),
-			extent);
+			windowSize);
 		if (result != VK_SUCCESS)
 		{
 			return result;
 		}
 
-		result = swapchain.create(surface, format, extent);
+		result = swapchain.create(surface, format, windowSize);
 		if (result != VK_SUCCESS)
 		{
 			return result;
@@ -295,7 +304,7 @@ namespace vk
 			return result;
 		}
 
-		result = depthStencil.create(VK_FORMAT_D16_UNORM, extent);
+		result = depthStencil.create(VK_FORMAT_D32_SFLOAT, windowSize);
 		if (result != VK_SUCCESS)
 		{
 			return result;
@@ -362,7 +371,7 @@ namespace vk
 				depthStencil.m_imageView
 			};
 
-			result = framebuffer[i].create(extent.width, extent.height, renderPass.m_renderPass, 2, imageViews);
+			result = framebuffer[i].create(windowSize.width, windowSize.height, renderPass.m_renderPass, 2, imageViews);
 			if (result != VK_SUCCESS)
 			{
 				return result;
@@ -375,7 +384,7 @@ namespace vk
 			}
 
 			commandBuffer[i].begin();
-			buildCommand(commandBuffer[i].m_commandBuffer, swapchainImage[i], framebuffer[i].m_framebuffer, extent);
+			buildCommand(commandBuffer[i].m_commandBuffer, swapchainImage[i], framebuffer[i].m_framebuffer, windowSize);
 			commandBuffer[i].end();
 		}
 
@@ -403,47 +412,46 @@ namespace vk
 			glm::mat4 projectionMatrix(1.0f);
 			glm::mat4 viewMatrix(1.0f);
 
-			projectionMatrix = glm::perspective(glm::radians(45.0f), (float)1024 / (float)768, 0.1f, 1000.0f);
+			projectionMatrix = glm::perspective(glm::radians(45.0f), (float)windowSize.width / (float)windowSize.height, 0.1f, 1000.0f);
 
-			static float zoom = 200.0f;
+			static float zoom = 30.0f;
 			static float rot_x;
 			static float rot_y;
+			static float trans_x;
+			static float trans_y;
 			static POINT op = {};
 			static POINT zp = {};
 			POINT np;
 
+			GetCursorPos(&np);
 			if (GetKeyState(VK_LBUTTON) < 0)
 			{
-				GetCursorPos(&np);
-				if (op.x == 0 && op.y == 0)
-				{
-					op = np;
-				}
-
-				rot_x -= (float)(op.x - np.x) / 90.0f;
-				rot_y -= (float)(op.y - np.y) / 90.0f;
-
-				op = np;
+				rot_x -= (float)(op.x - np.x) / 50.0f;
+				rot_y -= (float)(op.y - np.y) / 50.0f;
 			}
 
 			if (GetKeyState(VK_RBUTTON) < 0)
 			{
-				GetCursorPos(&np);
-				if (zp.x == 0 && zp.y == 0)
+				if (GetKeyState(VK_SHIFT) < 0)
 				{
-					zp = np;
+					zoom -= (float)(zp.y - np.y) / 5.0f;
 				}
-
-				zoom -= (float)(zp.y - np.y) / 10.0f;
-
-				zp = np;
+				else
+				{
+					trans_x -= (float)(zp.x - np.x) / 10.0f;
+					trans_y -= (float)(zp.y - np.y) / 10.0f;
+				}
 			}
+
+			op = np;
+			zp = np;
 
 			glm::vec3 eye(0.0f, 0.0f, zoom);
 			glm::vec3 center(0.0f, 0.0f, 0.0f);
 			glm::vec3 up(0.0f, 1.0f, 0.0);
 			
 			viewMatrix = glm::lookAt(eye, center, up);
+			viewMatrix = glm::translate(viewMatrix, glm::vec3(trans_x, trans_y, 0.0));
 			viewMatrix = glm::rotate(viewMatrix, rot_x, glm::vec3(0.0f, 1.0f, 0.0f));
 			viewMatrix = glm::rotate(viewMatrix, rot_y, glm::vec3(1.0f, 0.0f, 0.0f));
 

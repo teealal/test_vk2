@@ -1,3 +1,4 @@
+#include <glm/glm.hpp>
 #include "vk.h"
 #include "vk_model.h"
 
@@ -77,17 +78,20 @@ namespace vk
 			m_vertexInputInfo.vertexAttributeDescriptionCount = 2;
 			m_vertexInputInfo.pVertexAttributeDescriptions = &m_attributeDescriptions[0];
 
-			ResVec3* vertices = new ResVec3[header.numVerts];
-			ResFace* faces = new ResFace[header.numFaces];
+			std::unique_ptr<ResVec3> vertices;
+			std::unique_ptr<ResFace> faces;
+			
+			vertices.reset(new ResVec3[header.numVerts]);
+			faces.reset(new ResFace[header.numFaces]);
 
-			fin.read(reinterpret_cast<char*>(vertices), sizeof(ResVec3) * header.numVerts);
-			fin.read(reinterpret_cast<char*>(faces), sizeof(ResFace) * header.numFaces);
+			fin.read(reinterpret_cast<char*>(vertices.get()), sizeof(ResVec3) * header.numVerts);
+			fin.read(reinterpret_cast<char*>(faces.get()), sizeof(ResFace) * header.numFaces);
 
 			{
 				VkBufferCreateInfo bufInfo = {};
 				bufInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 				bufInfo.pNext = NULL;
-				bufInfo.size = getDeviceSize(sizeof(Vertex) * header.numVerts, 16);
+				bufInfo.size = getDeviceSize(sizeof(Vertex) * header.numVerts, 256);
 				bufInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
 				bufInfo.flags = 0;
 
@@ -99,22 +103,51 @@ namespace vk
 				VkMemoryAllocateInfo memAlloc = {};
 				memAlloc.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 				memAlloc.allocationSize = memReqs.size;
+				getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, &memAlloc.memoryTypeIndex);
 
 				err = vkAllocateMemory(getDevice(), &memAlloc, nullptr, &m_vertices.memory);
 
 
 				Vertex* mapped = nullptr;
-				err = vkMapMemory(getDevice(), m_vertices.memory, 0, memAlloc.allocationSize, 0, reinterpret_cast<void**>(&mapped));
+				err = vkMapMemory(getDevice(), m_vertices.memory, 0, bufInfo.size, 0, reinterpret_cast<void**>(&mapped));
 
 				for (uint32_t i = 0; i < header.numVerts; i++)
 				{
-					mapped[i].x = vertices[i].x;
-					mapped[i].y = vertices[i].y;
-					mapped[i].z = vertices[i].z;
+					mapped[i].x = vertices.get()[i].x;
+					mapped[i].y = vertices.get()[i].y;
+					mapped[i].z = vertices.get()[i].z;
 
 					mapped[i].nx = 0.0f;
-					mapped[i].ny = 1.0f;
+					mapped[i].ny = 0.0f;
 					mapped[i].nz = 0.0f;
+				}
+
+				for (uint32_t i = 0; i < header.numFaces; i++)
+				{
+					Vertex* p0 = &mapped[faces.get()[i].index[0]];
+					Vertex* p1 = &mapped[faces.get()[i].index[1]];
+					Vertex* p2 = &mapped[faces.get()[i].index[2]];
+
+					p0->nx += faces.get()[i].normal.x;
+					p0->ny += faces.get()[i].normal.y;
+					p0->nz += faces.get()[i].normal.z;
+
+					p1->nx += faces.get()[i].normal.x;
+					p1->ny += faces.get()[i].normal.y;
+					p1->nz += faces.get()[i].normal.z;
+
+					p2->nx += faces.get()[i].normal.x;
+					p2->ny += faces.get()[i].normal.y;
+					p2->nz += faces.get()[i].normal.z;
+				}
+
+				for (uint32_t i = 0; i < header.numVerts; i++)
+				{
+					glm::vec3 n(mapped[i].nx, mapped[i].ny, mapped[i].nz);
+					n = glm::normalize(n);
+					mapped[i].nx = n.x;
+					mapped[i].ny = n.y;
+					mapped[i].nz = n.z;
 				}
 
 				vkUnmapMemory(getDevice(), m_vertices.memory);
@@ -125,7 +158,7 @@ namespace vk
 				VkBufferCreateInfo bufInfo = {};
 				bufInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
 				bufInfo.pNext = NULL;
-				bufInfo.size = getDeviceSize(sizeof(uint32_t) * header.numFaces * 3, 16);
+				bufInfo.size = getDeviceSize(sizeof(uint32_t) * header.numFaces * 3, 256);
 				bufInfo.usage = VK_BUFFER_USAGE_INDEX_BUFFER_BIT;
 				bufInfo.flags = 0;
 
@@ -137,18 +170,19 @@ namespace vk
 				VkMemoryAllocateInfo memAlloc = {};
 				memAlloc.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 				memAlloc.allocationSize = memReqs.size;
+				getMemoryType(memReqs.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, &memAlloc.memoryTypeIndex);
 
 				err = vkAllocateMemory(getDevice(), &memAlloc, nullptr, &m_indices.memory);
 
 				uint32_t* mapped = nullptr;
-				err = vkMapMemory(getDevice(), m_indices.memory, 0, memAlloc.allocationSize, 0, reinterpret_cast<void**>(&mapped));
+				err = vkMapMemory(getDevice(), m_indices.memory, 0, bufInfo.size, 0, reinterpret_cast<void**>(&mapped));
 
 				uint32_t index = 0;
 				for (uint32_t i = 0; i < header.numFaces; i++)
 				{
-					mapped[index + 0] = faces[i].index[0];
-					mapped[index + 1] = faces[i].index[1];
-					mapped[index + 2] = faces[i].index[2];
+					mapped[index + 0] = faces.get()[i].index[0];
+					mapped[index + 1] = faces.get()[i].index[1];
+					mapped[index + 2] = faces.get()[i].index[2];
 
 					index += 3;
 				}
