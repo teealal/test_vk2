@@ -256,7 +256,7 @@ namespace vk
 		}
 
 		{
-			model.create("sphere.mf0");
+			model.create("dragon.mf0");
 		}
 
 		result = pipelineCache.create();
